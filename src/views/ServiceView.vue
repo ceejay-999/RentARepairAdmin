@@ -12,12 +12,6 @@
     </div><!-- End Page Title -->
     <div class="card">
         <div class="card-body">
-            <p></p>
-            <button type="button" class="btn btn-primary">Add Ride Sharer</button>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
           <h5 class="card-title">RideSharer</h5>
           <div id="divRequest5">
             <table id="servicestable1" class="table tableborderless datatable" width="100%">
@@ -61,6 +55,8 @@
               status: "",
            }],
            technicians: 0,
+           isLoading: false,
+        fullPage: true
          }
        },
        created()

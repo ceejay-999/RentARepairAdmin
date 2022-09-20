@@ -61,19 +61,18 @@
           <i class="bi bi-circle"></i><span>Towing Company</span>
         </RouterLink>
       </li>
+      <li>
+        <RouterLink to="/delivery">
+          <i class="bi bi-circle"></i><span>Delivery</span>
+        </RouterLink>
+      </li>
       
     </ul>
   </li><!-- End Components Nav -->
   <li class="nav-item">
     <RouterLink class="nav-link collapsed" to="/service">
       <i class="bi bi-nut"></i>
-      <span>Services</span>
-    </RouterLink>
-  </li><!-- End Profile Page Nav -->
-  <li class="nav-item">
-    <RouterLink class="nav-link collapsed" to="/service">
-      <i class="bi bi-nut"></i>
-      <span>News / Updates</span>
+      <span>App Configuration</span>
     </RouterLink>
   </li><!-- End Profile Page Nav -->
   <li class="nav-item">
