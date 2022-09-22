@@ -25,23 +25,27 @@
               <rect x="0" y="50" rx="" ry="" width="445" height="25" />
               <rect x="0" y="80" rx="" ry="" width="445" height="25" />
             </ContentLoader>
-            <div class="card announce" v-for="t in announcements" :key="t">
-              <card-body>
-                <div class="row g-0">
-                  <div class="col-md-4">
-                    <img :src="t.imgsrc" class="img-fluid rounded-start" alt="...">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body">
-                      <h5 class="card-title">{{t.title}}</h5>
-                      <p class="card-text">{{t.description}}</p>
-                      <p class="card-text"><small class="text-muted">{{t.created}}</small></p>
+            <ul>
+              <li v-for="t in announcements" v-bind:key="t.ann_id">
+                {{t.ann_title}}
+              <div class="card announce">
+                <card-body>
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                      <!-- <img :src="t.ann_imgsrc" class="img-fluid rounded-start"> -->
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title">{{t.ann_title}}</h5>
+                        <p class="card-text">{{t.ann_description}}</p>
+                        <p class="card-text"><small class="text-muted">{{t.ann_created_at}}</small></p>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-              </card-body>
-            </div>
+                </card-body>
+              </div>
+              </li>
+            </ul>
 
           </div>
       </div>
@@ -106,7 +110,7 @@
 </template>
 <script>
 import { local } from '../functions.js';
- import { axiosReq } from '@/functions';
+ import { axiosReq, removeFix } from '@/functions';
  import { ciapi } from '@/globals';
  import { ContentLoader } from 'vue-content-loader'
 import router from '../router';
@@ -144,7 +148,7 @@ import router from '../router';
         for(let r in res.data.result) 
         {this.task_types.push(res.data.result[r].config_value)}
         
-      })
+      })  
       axiosReq({
         method: 'post',
         url: ciapi +'admin/announcements?_batch=true',
@@ -154,11 +158,11 @@ import router from '../router';
           }
       }).then(res=>{
         document.querySelector('.con-loader1').style.display = "none"
-        document.querySelector('.announce').style.display = "block";
-        console.log(res.data);
+        document.querySelector('.announce').style.display = "flex";
         for(let r in res.data.result) 
         {this.announcements.push(res.data.result[r])}
-        
+
+        console.log(this.announcements)
       })
   },
   methods: {
