@@ -5,7 +5,7 @@ import TechnicianView from '../views/TechnicianView.vue';
 import RideSharerView from '../views/RideSharerView.vue';
 import TowingView from '../views/TowingView.vue';
 import UserProfileView from '../views/ProfileView.vue';
-import ServiceView from '../views/ServiceView.vue';
+import ServiceView from '../views/ServiceViews.vue';
 import DeliveryView from '../views/DeliveryView.vue';
 
 const router = createRouter({
