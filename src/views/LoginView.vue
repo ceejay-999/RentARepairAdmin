@@ -30,7 +30,7 @@
                    </div>
    
                    <div class="col-12">
-                       <button @click="loginAdmin" class="btn btn-primary px-4 float-end mt-4">login</button>
+                       <button @click="loginAdmin" @keypress.enter="loginAdmin" class="btn btn-primary px-4 float-end mt-4">login</button>
                    </div>
                </form>
            </div>

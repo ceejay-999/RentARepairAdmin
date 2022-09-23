@@ -14,7 +14,7 @@
   <div class="row">
     <div class="col-xl-8 col-md-12">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body conl">
             <h5 class="card-title">Announcements</h5>
             <ContentLoader  class="con-loader1"
               width="900"
@@ -25,34 +25,29 @@
               <rect x="0" y="50" rx="" ry="" width="445" height="25" />
               <rect x="0" y="80" rx="" ry="" width="445" height="25" />
             </ContentLoader>
-            <ul>
-              <li v-for="t in announcements" v-bind:key="t.ann_id">
-                {{t.ann_title}}
-              <div class="card announce">
-                <card-body>
-                  <div class="row g-0">
-                    <div class="col-md-4">
-                      <!-- <img :src="t.ann_imgsrc" class="img-fluid rounded-start"> -->
-                    </div>
-                    <div class="col-md-8">
-                      <div class="card-body">
-                        <h5 class="card-title">{{t.ann_title}}</h5>
-                        <p class="card-text">{{t.ann_description}}</p>
-                        <p class="card-text"><small class="text-muted">{{t.ann_created_at}}</small></p>
-                      </div>
-                    </div>
+            <div class="announce">
+              <div class="card" v-for="t in announcements" v-bind:key="t.ann_id">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img :src="t.ann_imgsrc" class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{t.ann_description}}</h5>
+                    <p class="card-text">{{t.ann_description}}</p>
+                    <p class="card-text"><small class="text-muted">{{t.ann_created_at}}</small></p>
                   </div>
-                </card-body>
+                </div>
               </div>
-              </li>
-            </ul>
+            </div>
+          </div>
 
           </div>
       </div>
     </div>
     <div class="col-xl-4 col-md-12">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body conl">
           <div class="card-title">
             Technician Service Types  
           </div>
@@ -72,7 +67,7 @@
           </ul>
           <div class="row g-3 addservice">
             <div class="col-auto">
-              <input type="text" class="form-control" id="AddService" placeholder="Add Services">
+              <input type="text" class="form-control" v-model="addingService" id="AddService" placeholder="Add Services">
             </div>
             <div class="col-auto">
               <button @click="addService" class="btn btn-primary mb-3">Add</button>
@@ -95,7 +90,7 @@
           </div> 
           <form class="row g-3">
             <div class="col-auto">
-              <input type="text" class="form-control" v-model="addingService" id="AddService" placeholder="Add Services">
+              <input type="text" class="form-control" placeholder="Add Services">
             </div>
             <div class="col-auto">
               <button type="submit" class="btn btn-primary mb-3">Add</button>
@@ -112,6 +107,7 @@
 import { local } from '../functions.js';
  import { axiosReq, removeFix } from '@/functions';
  import { ciapi } from '@/globals';
+ import axios from 'axios'
  import { ContentLoader } from 'vue-content-loader'
 import router from '../router';
 
@@ -157,12 +153,9 @@ import router from '../router';
             PWAuthUser: local.get('user_id')
           }
       }).then(res=>{
+        this.announcements = res.data.result;
         document.querySelector('.con-loader1').style.display = "none"
-        document.querySelector('.announce').style.display = "flex";
-        for(let r in res.data.result) 
-        {this.announcements.push(res.data.result[r])}
-
-        console.log(this.announcements)
+        document.querySelector('.announce').style.display = "unset"
       })
   },
   methods: {
@@ -184,15 +177,19 @@ import router from '../router';
     },
     addService(){
       const taskprob = this.task_types.length
-      axiosReq({
+      console.log(this.addingService);
+      const form = new FormData();
+      form.append('field','task_problems_'+taskprob);
+      form.append('value',this.addingService);
+      axios({
         method: 'post',
-        url: ciapi +'/admin/config/create',
+        url: ciapi +'admin/config/create',
         headers:{
             PWAuth: local.get('user_token'),
             PWAuthUser: local.get('user_id')
           },
         data:{feild: 'task_problems_'+taskprob,
-              value: this.addingService
+              value:form
         }
       }).then(res=>{
         console.log(res.data);
@@ -243,5 +240,8 @@ display: none;
 }
 .announce{
 display: none;
+}
+.conl{
+  overflow: hidden !important;
 }
 </style>
