@@ -176,24 +176,21 @@ import router from '../router';
       })
     },
     addService(){
-      const taskprob = this.task_types.length
+      const taskprob = this.task_types.length;
       console.log(this.addingService);
-      const form = new FormData();
-      form.append('field','task_problems_'+taskprob);
-      form.append('value',this.addingService);
-      axios({
+      axiosReq({
         method: 'post',
-        url: ciapi +'admin/config/create',
+        url: ciapi +'/admin/config/create',
         headers:{
             PWAuth: local.get('user_token'),
             PWAuthUser: local.get('user_id')
           },
-        data:{feild: 'task_problems_'+taskprob,
-              value:form
+        data:{field: 'task_problems_'+taskprob,
+              value: this.addingService
         }
       }).then(res=>{
         console.log(res.data);
-        // router.go(0);
+        router.go(0);
         
       })
     }
