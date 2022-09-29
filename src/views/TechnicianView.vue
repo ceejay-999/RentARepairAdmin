@@ -11,6 +11,9 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
+    <div class="card">
+        <button class="btn btn-primary"  @click="exportToexcel">Download Excel File</button>
+    </div>
     <div class="card recent-sales overflow-auto">
       <loading class="loadsec" v-model:active="isLoading"
                  :is-full-page="fullPage"/>
@@ -55,6 +58,7 @@
    import axios from 'axios';
    import { local } from '../functions.js';
    import router from '../router';
+   import { read, utils, writeFile, writeFileXLSX } from 'xlsx';
 
    const value = ({
     name: "App",
@@ -201,6 +205,14 @@
       });
        },
        methods : {
+      exportToexcel(){
+        const table = document.getElementById("techniciantable");
+        const wb = utils.table_to_book(table);
+        writeFileXLSX(wb,"TechnicianTable.xlsx");
+        
+      },
+
+      
       approveEmp(empID, action){
         document.querySelector(".loadsec").style.display = "flex";
         document.querySelector(".loadsec").style.justifyConent = "center";

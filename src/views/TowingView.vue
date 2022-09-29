@@ -11,6 +11,9 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
+    <div class="card">
+      <button class="btn btn-primary" @click="exportTowExcel">Download Excel File</button>
+    </div>
     <div class="card recent-sales overflow-auto">
       <loading class="loadsec" v-model:active="isLoading"
                  :is-full-page="fullPage"/>
@@ -55,6 +58,7 @@
    import axios from 'axios';
    import { local } from '../functions.js';
    import router from '../router';
+   import { read, utils, writeFile, writeFileXLSX } from 'xlsx';
 
    const value = ({
     name: "App",
@@ -199,6 +203,11 @@
           });
        },
        methods : {
+        exportTowExcel(){
+          const table = document.getElementById("TowingTable");
+        const wb = utils.table_to_book(table);
+        writeFileXLSX(wb,"TowingTable.xlsx");
+      },
       approveEmp(empID, action){
         document.querySelector(".loadsec").style.display = "flex";
         document.querySelector(".loadsec").style.justifyConent = "center";
@@ -216,55 +225,6 @@
         else if(action == 3) // decline
         {
           value = 3;
-          console.log(value);
-        }
-        else if(action == 4) // unblock
-        {
-          value = 4;
-          console.log(value);
-        }
-        let val = new FormData();
-        val.append('isdeactivated',value);
-        console.log(value);
-        axios({
-        method: 'post',
-        headers:{
-            PWAuth: local.get('user_token'),
-            PWAuthUser: local.get('user_id')
-        },
-        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/users/update?user_id='+empID,
-        data: val
-        }).catch(()=>{
-          console.log(res);
-        }).then(res=>{
-          console.log(res.data);
-          document.querySelector(".loadsec").style.display = "none !important";
-          router.go(0);
-        });
-
-      },//End of Function approveEmp
-      onCancel() {
-              console.log('User cancelled the loader.')
-            } 
-    },//End of Methods
-    methods : {
-      approveEmp(empID, action){
-        document.querySelector(".loadsec").style.display = "flex";
-        document.querySelector(".loadsec").style.justifyConent = "center";
-        let value = 0;
-        if(action == 1) // approve
-        {
-          value = 0;
-          console.log(value);
-        }
-        else if(action == 2) // block
-        {
-          value = 1;
-          console.log(value);
-        }
-        else if(action == 3) // decline
-        {
-          value = 3
           console.log(value);
         }
         else if(action == 4) // unblock

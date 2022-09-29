@@ -11,9 +11,11 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
-      <loading class="loadsec" v-model:active="isLoading"
-                 :is-full-page="fullPage"/>
-        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <loading class="loadsec" v-model:active="isLoading"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                :is-full-page="fullPage"/>
+                 <div class="card">
+      <button class="btn btn-primary" @click="exportRideToexcel">Download Excel File</button>
+    </div>
     <div class="card recent-sales overflow-auto">
         <div class="card-body">
           <h5 class="card-title">RideSharer</h5> 
@@ -55,6 +57,8 @@
    import axios from 'axios';
    import { local } from '../functions.js';
    import router from '../router';
+   import { read, utils, writeFile, writeFileXLSX } from 'xlsx';
+
 
    const value = ({
     name: "App",
@@ -198,6 +202,12 @@
           });
        },
        methods : {
+        exportRideToexcel(){
+        const table = document.getElementById("ridesharerTable");
+        const wb = utils.table_to_book(table);
+        writeFileXLSX(wb,"RideSharerTable.xlsx");
+        
+      },
       approveEmp(empID, action){
         document.querySelector(".loadsec").style.display = "flex";
         document.querySelector(".loadsec").style.justifyConent = "center";

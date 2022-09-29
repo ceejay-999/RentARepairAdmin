@@ -224,7 +224,9 @@
                   <h5 class="card-title">Reports <span>/Today</span></h5>
 
                   <!-- Line Chart -->
-                  <div id="reportsChart"></div>
+                    <div class="reportchart">
+                      <canvas id="myChart" width="600"></canvas>
+                    </div>
                   <!-- End Line Chart -->
 
                 </div>
@@ -450,37 +452,28 @@
             </div>
 
             <div class="card-body pb-0">
-              <h5 class="card-title">Budget Report <span>| This Month</span></h5>
+              <h5 class="card-title">Latest Transactions <span>| This Month</span></h5>
+              <ContentLoader  class="con-loader1"
+              width="900"
+              height="126"
+              primaryColor="#f3f3f3"
+              secondaryColor="#cccccc">
+              <rect x="0" y="20" rx="" ry="" width="445" height="25" />
+              <rect x="0" y="50" rx="" ry="" width="445" height="25" />
+              <rect x="0" y="80" rx="" ry="" width="445" height="25" />
+            </ContentLoader>
+              <div class="news" v-for="i in latesttrans" :key="i.trans_id">
+                <div class="post-item clearfix">
+                  <h4><a href="#">Transaction ID: {{i.trans_id}}</a></h4>
+                  <p>Application Charge: ${{getValue(i.trans_distcharge,i.trans_appcharge)}}</p>
+                  <p>Total Fee: ${{i.trans_total}}</p>
+                </div>
 
-              <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
-
+              </div>
             </div>
           </div><!-- End Budget Report -->
 
-          
-          <!-- <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Website Traffic <span>| Today</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-            </div>
-          </div> -->
-
+        
           <!-- News & Updates Traffic -->
           <div class="card">
             <div class="filter">
@@ -503,26 +496,6 @@
                 <div class="post-item clearfix">
                   <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
                   <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <h4><a href="#">Quidem autem et impedit</a></h4>
-                  <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-                  <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <h4><a href="#">Laborum corporis quo dara net para</a></h4>
-                  <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-                </div>
-
-                <div class="post-item clearfix">
-                  <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
-                  <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
                 </div>
 
               </div><!-- End sidebar recent posts-->
@@ -559,76 +532,75 @@
         towtruck: 0,
         delivery: 0,
         isLoading: false,
-        fullPage: true
+        fullPage: true,
+        latesttrans: [{}],
+        appcharge:[{}],
+        avgtech: 0,
+        avgride: 0,
+        avgtowtruck: 0,
+        avgdel: 0,
       }
     },
     mounted(){
+      document.querySelector('.news').style.display = "none";
       axios({
         method: 'post',
         headers:{
             PWAuth: local.get('user_token'),
             PWAuthUser: local.get('user_id')
         },
-        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/users?user_role=technician&_batch=true',
+        url: 'https://medicalcouriertransportation.com/rentarepair/api/users?_batch=true&_NEQ_user_role=Customer',
         }).catch(()=>{
           console.log(res);
         }).then(res=>{
           if(res.data.success)
           {
-            this.technicians = Object.keys(res.data.result).length;
+            (res.data.result).forEach(el => {
+              switch(el.user_role){
+                case 'Technician':
+                  this.technicians++;
+                break;
+                case 'Tow Truck Operator':
+                  this.towtruck++;
+                break;
+                case 'Ride Sharer':
+                  this.ridesharer++;
+                break;
+                case 'Delivery':
+                  this.delivery++;
+                break;
+              }
+            });
             document.querySelector('.content1').style.display = "none";
-            document.querySelector('.con-value1').style.display = "block";
-          }
-        });
-        axios({
-        method: 'post',
-        headers:{
-            PWAuth: local.get('user_token'),
-            PWAuthUser: local.get('user_id')
-        },
-        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/users?user_role=ride_sharer&_batch=true',
-        }).catch(()=>{
-          console.log(res);
-        }).then(res=>{
-          if(res.data.success)
-          {
-            this.ridesharer = Object.keys(res.data.result).length;
             document.querySelector('.content2').style.display = "none";
-            document.querySelector('.con-value2').style.display = "block";
-          }
-        });
-        axios({
-        method: 'post',
-        headers:{
-            PWAuth: local.get('user_token'),
-            PWAuthUser: local.get('user_id')
-        },
-        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/users?user_role=delivery&_batch=true',
-        }).catch(()=>{
-          console.log(res);
-        }).then(res=>{
-          if(res.data.success)
-          {
-            this.delivery = Object.keys(res.data.result).length;
-            document.querySelector('.content4').style.display = "none";
-            document.querySelector('.con-value4').style.display = "block";
-          }
-        });
-        axios({
-        method: 'post',
-        headers:{
-            PWAuth: local.get('user_token'),
-            PWAuthUser: local.get('user_id')
-        },
-        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/users?user_role=tow_truck_operator&_batch=true',
-        }).catch(()=>{
-          console.log(res);
-        }).then(res=>{
-          if(res.data.success)
-          {
-            this.towtruck = Object.keys(res.data.result).length;
             document.querySelector('.content3').style.display = "none";
+            document.querySelector('.content4').style.display = "none";
+            document.querySelector('.con-value1').style.display = "block";
+            document.querySelector('.con-value2').style.display = "block";
             document.querySelector('.con-value3').style.display = "block";
+            document.querySelector('.con-value4').style.display = "block";
+            this.avgtech = (this.technicians / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
+            this.avgride = (this.towtruck / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
+            this.avgtowtruck = (this.ridesharer / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
+            this.avgdel = (this.delivery / (this.delivery + this.towtruck + this.ridesharer + this.delivery)) * 100;
+            this.getChart();
+          }
+        });
+      axios({
+        method: 'post',
+        headers:{
+            PWAuth: local.get('user_token'),
+            PWAuthUser: local.get('user_id')
+        },
+        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/transactions?_orderby=trans__id_DESC&_batch=true&_limit=5',
+        }).catch(()=>{
+          console.log(res);
+        }).then(res=>{
+          if(res.data.success)
+          {
+            document.querySelector('.con-loader1').style.display = "none";
+            document.querySelector('.news').style.display = "block !important";
+            this.latesttrans = res.data.result;
           }
         });
       $(document).ready(function () {
@@ -724,7 +696,7 @@
           document.querySelectorAll('.logMetech1').forEach(el=>{
             el.onclick = e=>{
               const dataelem = e.target.closest("[data-value]")
-              value.methods.approveEmp(dataelem.dataset.value,1); //(data, role, action) 
+              value.methods.approveEmp(dataelem.dataset.value,1); //(data, role, action)
             }
           })
         });
@@ -1106,11 +1078,41 @@
             }
           })
         });//Jquery End of Action Methods for technicians
-
       });//end of document ready function
-
     },//end of mounted
     methods : {
+      getChart(){
+        const ctx = document.getElementById('myChart');
+        myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                  labels: [
+                    'Technician',
+                    'RideSharer',
+                    'Tow Truck Operator',
+                    'Delivery Driver',
+                  ],
+                  datasets: [{
+                    label: 'Employee',
+                    data: [parseInt(this.avgtech),parseInt(this.avgride),parseInt(this.avgtowtruck),parseInt(this.avgdel)],
+                    backgroundColor: [
+                      'rgb(255, 99, 132)',
+                      'rgb(54, 162, 235)',
+                      'rgb(255, 205, 86)',
+                      'rgb(255, 305, 26)'
+                    ],
+                    hoverOffset: 4
+                  }]
+              },
+              options: {
+                responsive: false,
+             }
+          });
+      },
+      getValue(val1,val2){
+          let value = parseFloat(val1) * parseFloat(val2)
+          return value.toFixed(2);
+      },
       approveEmp(empID, action){
         document.querySelector(".loadsec").style.display = "flex";
         document.querySelector(".loadsec").style.justifyConent = "center";
@@ -1205,6 +1207,15 @@
 .con-value6{
   display: none;
 }
-
-
+.post-item h4 {
+  margin-left: 0 !important;
+}
+.post-item p{
+  margin-left: 0 !important;
+}
+.reportchart{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
