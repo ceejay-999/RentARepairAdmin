@@ -580,8 +580,8 @@
             document.querySelector('.con-value3').style.display = "block";
             document.querySelector('.con-value4').style.display = "block";
             this.avgtech = (this.technicians / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
-            this.avgride = (this.towtruck / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
-            this.avgtowtruck = (this.ridesharer / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
+            this.avgride = (this.ridesharer / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
+            this.avgtowtruck = (this.towtruck / (this.technicians + this.towtruck + this.ridesharer + this.delivery)) * 100;
             this.avgdel = (this.delivery / (this.delivery + this.towtruck + this.ridesharer + this.delivery)) * 100;
             this.getChart();
           }
@@ -1096,10 +1096,10 @@
                     label: 'Employee',
                     data: [parseInt(this.avgtech),parseInt(this.avgride),parseInt(this.avgtowtruck),parseInt(this.avgdel)],
                     backgroundColor: [
-                      'rgb(255, 99, 132)',
-                      'rgb(54, 162, 235)',
-                      'rgb(255, 205, 86)',
-                      'rgb(255, 305, 26)'
+                      'rgb(117, 117, 117)',
+                      'rgb(255, 74, 61)',
+                      'rgb(50,50,50)',
+                      'rgb(183, 22, 11)'
                     ],
                     hoverOffset: 4
                   }]
