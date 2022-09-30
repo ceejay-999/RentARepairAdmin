@@ -64,7 +64,7 @@
           </ContentLoader>
           <ul class="list-group list-group-flush techtypes">
             <li class="list-group-item" v-for="t in task_types" :key="t">{{t}}
-              <span class="closeBtn" @click="deleteService(t)"></span>
+              <span class="closeBtn" @click="promptExample3(t)"></span>
             </li>
           </ul>
           <div class="row g-3 addservice">
@@ -214,25 +214,27 @@ import router from '../router';
       })
   },
   methods: {
-    deleteService(name){
-      document.querySelector(".loadsec").style.display = "flex";
-      document.querySelector(".loadsec").style.justifyConent = "center";
-      name = name.replaceAll('_','%underscore%');
-      name = name.replaceAll(' ','_');
-      name = name.replaceAll('%underscore%','_');
-      axiosReq({
-        method: 'post', 
-        url: ciapi +'/admin/config/delete?config_value='+name,
-        headers:{
-            PWAuth: local.get('user_token'),
-            PWAuthUser: local.get('user_id')
-          },
-      }).then(res=>{
-        document.querySelector(".loadsec").style.display = "none !important";
-        this.task_types.splice(this.task_types.indexOf(name),1);
-        router.go(0);
-        
-      })
+    promptExample3(name) {
+      if(confirm("Do you really want to delete?")){
+        document.querySelector(".loadsec").style.display = "flex";
+            document.querySelector(".loadsec").style.justifyConent = "center";
+            name = name.replaceAll('_','%underscore%');
+            name = name.replaceAll(' ','_');
+            name = name.replaceAll('%underscore%','_');
+            axiosReq({
+              method: 'post', 
+              url: ciapi +'/admin/config/delete?config_value='+name,
+              headers:{
+                  PWAuth: local.get('user_token'),
+                  PWAuthUser: local.get('user_id')
+                },
+            }).then(res=>{
+              document.querySelector(".loadsec").style.display = "none !important";
+              this.task_types.splice(this.task_types.indexOf(name),1);
+              router.go(0);
+              
+            })
+      }
     },
     addService(){
       document.querySelector(".loadsec").style.display = "flex";

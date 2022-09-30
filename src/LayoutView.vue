@@ -76,12 +76,6 @@
     </RouterLink>
   </li><!-- End Profile Page Nav -->
   <li class="nav-item">
-    <RouterLink class="nav-link collapsed" to="/service">
-      <i class="bi bi-nut"></i>
-      <span>Transactions</span>
-    </RouterLink>
-  </li><!-- End Profile Page Nav -->
-  <li class="nav-item">
     <a class="nav-link collapsed" href="#">
       <i class="bi bi-box-arrow-in-right"></i>
       <span>Logout</span>
