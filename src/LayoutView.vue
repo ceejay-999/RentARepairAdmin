@@ -1,4 +1,6 @@
 <template>
+  <loading class="loadsec" v-model:active="isLoading"
+                 :is-full-page="fullPage"/>
 <header id="header" class="header fixed-top d-flex align-items-center">
 
 <div class="d-flex align-items-center justify-content-between">
@@ -76,7 +78,13 @@
     </RouterLink>
   </li><!-- End Profile Page Nav -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="#">
+    <RouterLink class="nav-link collapsed" to="/transaction">
+      <i class="bi bi-nut"></i>
+      <span>Transaction History</span>
+    </RouterLink>
+  </li><!-- End Profile Page Nav -->
+  <li class="nav-item">
+    <a class="nav-link collapsed log" @click="LogoutAdmin">
       <i class="bi bi-box-arrow-in-right"></i>
       <span>Logout</span>
     </a>
@@ -93,8 +101,16 @@
 </template>
 <script>
   import '../src/assets/boots.js';
+  import { axiosReq, removeFix } from '@/functions';
+  import { ciapi } from '@/globals';
+  import { local } from '@/functions.js';
+  import Loading from 'vue-loading-overlay';
+  import router from '@/router';
 
   export default {
+    components: {
+    Loading
+   },
     created(){
       function elementLoad(selector){
       return new Promise(resolve=>{
@@ -115,9 +131,36 @@
       document.querySelector('.search-bar-toggle').onclick= ()=> document.querySelector('.search-bar').classList.toggle('search-bar-show');
     });
 
-  }}
+  },
+  methods: {
+    LogoutAdmin()
+    {
+      document.querySelector(".loadsec").style.display = "flex";
+        document.querySelector(".loadsec").style.justifyConent = "center";
+      axiosReq({
+          method:'post',
+          url: ciapi+'admin/logout'.toLowerCase(),
+          headers:{
+              PWAuth: local.get('user_token'),
+              PWAuthUser: local.get('user_id')
+          }
+      }).catch(()=>{
+          openToast('Something went wrong...', 'danger');
+      }).then(()=>{
+              localStorage.clear();
+              document.querySelector(".loadsec").style.display = "none !important";
+              window.localStorage.clear();
+              router.replace('/login');
+      });
+    }
+  }
+}
 </script>
 <style scoped>
 @import '../src/assets/style.css';
 @import '../src/assets/bootstrap-icons/bootstrap-icons.css';
+
+.log{
+  cursor: pointer;
+}
 </style>

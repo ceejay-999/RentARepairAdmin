@@ -592,7 +592,7 @@
             PWAuth: local.get('user_token'),
             PWAuthUser: local.get('user_id')
         },
-        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/transactions?_orderby=trans__id_DESC&_batch=true&_limit=5',
+        url: 'https://www.medicalcouriertransportation.com/rentarepair/api/transactions?_orderby=trans__created__at_DESC&_batch=true&_limit=5',
         }).catch(()=>{
           console.log(res);
         }).then(res=>{
