@@ -1,5 +1,46 @@
 <template>
-    <div class="logincard">
+    <div class="card" style="max-width: 850px;">
+    <div class="row g-0">
+        <div class="col-md-4 logo">
+        <img src="../assets/img/logo.png" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+        <div class="card-body">
+            <h2>Admin Login</h2>
+           <p>Welcome back Admin!</p>
+           <div class="fgroup">
+               <form @submit.prevent="" class="row g-4">
+                   <div class="col-12">
+                       <label>Username</label>
+                       <div class="input-group">
+                           <input v-model="username" type="text" class="form-control" placeholder="Enter Username">
+                       </div>
+                   </div>
+   
+                   <div class="col-12">
+                       <label>Password</label>
+                       <div class="input-group">
+                           <input v-model="password" type="password" class="form-control" placeholder="Enter Password">
+                       </div>
+                   </div>
+   
+                   <div class="col-sm-6">
+                       <div class="form-check">
+                           <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+                           <label class="form-check-label" for="inlineFormCheck">Remember me</label>
+                       </div>
+                   </div>
+   
+                   <div class="col-12">
+                       <button @click="loginAdmin" @keypress.enter="loginAdmin" class="btn btn-primary px-4 float-end mt-4">login</button>
+                   </div>
+               </form>
+           </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    <!-- <div class="logincard">
        <div class="leftcard">
            <img src="../assets/img/logo.png" />
        </div>                   
@@ -35,7 +76,7 @@
                </form>
            </div>
        </div>
-    </div>
+    </div> -->
    </template>
    
    <script>
@@ -86,7 +127,7 @@
    </script>
    
    <style scoped>
-   .leftcard{
+   /* .leftcard{
        background-image: url("../assets/img/bg.jpg");
        background-size: cover;
        background-position: 100%;
@@ -149,6 +190,52 @@
    .form-check-input:checked{
        background-color: #aa0927;
        border-color: #aa0927;
+   } */
+   .logo{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 50%;
+    background: url('../assets/img/bg.jpg') no-repeat;
+    background-position: cover;
    }
-   
+   .card{
+    max-width: 850px;
+    margin: 8% auto;
+    display: flex;
+   }
+   .col-md-8{
+    width: 45%;
+    height: 550px;
+   }
+   .card-body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 23% auto;
+   }
+
+   @media only screen
+    and (max-width : 720px) {
+    /* Nav Area Sub-Menu Style */
+    .logo{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 12% auto;
+    background: none;
+   }
+   .col-md-8{
+    width: 100%;
+   }
+   .card-body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0% auto;
+   }
+    }
    </style>
